@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { dummyItems } from '../utils/dummyData';
 
 const useFetch = (url) => {
   const [data, setData] = useState(null);
@@ -14,17 +13,11 @@ const useFetch = (url) => {
       setError(null);
       
       try {
-        // Stage 2: Simulate backend fetch using dummy data
-        if (url === '/api/items') {
-          // Simulate network latency
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          setData(dummyItems);
-          setLoading(false);
-          return;
-        }
+        // Construct full URL if it's an API route
+        const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
+        const fullUrl = url.startsWith('/api') ? `${baseUrl}${url}` : url;
 
-        // Real fetch implementation for future stages
-        const response = await fetch(url, { signal: abortController.signal });
+        const response = await fetch(fullUrl, { signal: abortController.signal });
         if (!response.ok) {
           throw new Error(`Error: ${response.status} ${response.statusText}`);
         }

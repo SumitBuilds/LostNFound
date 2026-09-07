@@ -47,7 +47,7 @@ export default function ItemCard({ item }) {
         </div>
         <div className="flex items-center gap-2 text-xs text-text-dark/60 font-medium">
           <Calendar size={14} className="text-primary/50" />
-          <span className="font-data">{new Date(item.dateLostFound).toLocaleDateString()}</span>
+          <span className="font-data">{new Date(item.date || item.dateLostFound).toLocaleDateString()}</span>
         </div>
       </div>
       

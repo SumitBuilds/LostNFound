@@ -104,7 +104,7 @@ export default function ItemsList() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredItems.length > 0 ? (
             filteredItems.map(item => (
-              <ItemCard key={item.id} item={item} />
+              <ItemCard key={item._id || item.id} item={item} />
             ))
           ) : (
             <div className="col-span-full py-20 text-center flex flex-col items-center">
