@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import ItemCard from '../components/ItemCard';
 import useFetch from '../hooks/useFetch';
+import { useFilters } from '../context/FiltersContext';
 import { Search, Filter, Loader2, AlertCircle } from 'lucide-react';
 
 export default function ItemsList() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState('all');
+  const { 
+    searchTerm, setSearchTerm, 
+    filterType, setFilterType,
+    category, setCategory,
+    status, setStatus 
+  } = useFilters();
 
   const { data: items, loading, error } = useFetch('/api/items');
 
@@ -13,7 +18,9 @@ export default function ItemsList() {
     const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           item.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesType = filterType === 'all' || item.type === filterType;
-    return matchesSearch && matchesType;
+    const matchesCategory = category === 'all' || item.category === category;
+    const matchesStatus = status === 'all' || item.status === status;
+    return matchesSearch && matchesType && matchesCategory && matchesStatus;
   });
 
   return (
@@ -24,13 +31,13 @@ export default function ItemsList() {
           <p className="text-text-dark/70 font-outfit max-w-xl">Search the network for lost and found items. Metadata is logged securely.</p>
         </div>
         
-        <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-          <div className="relative">
+        <div className="flex flex-col sm:flex-row flex-wrap gap-4 w-full md:w-auto justify-start md:justify-end">
+          <div className="relative flex-grow sm:flex-grow-0">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/40" size={20} />
             <input 
               type="text" 
               placeholder="Search database..." 
-              className="pl-12 pr-4 py-3 bg-background border border-primary/20 radius-sys w-full sm:w-64 focus:outline-none focus:border-accent transition-colors font-data text-sm"
+              className="pl-12 pr-4 py-3 bg-background border border-primary/20 radius-sys w-full sm:w-48 focus:outline-none focus:border-accent transition-colors font-data text-sm"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -46,6 +53,35 @@ export default function ItemsList() {
               <option value="all">All Types</option>
               <option value="lost">Lost Only</option>
               <option value="found">Found Only</option>
+            </select>
+          </div>
+
+          <div className="relative">
+            <Filter className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/40" size={20} />
+            <select 
+              className="pl-12 pr-10 py-3 bg-background border border-primary/20 radius-sys w-full sm:w-auto focus:outline-none focus:border-accent transition-colors font-sans font-medium appearance-none"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option value="all">All Categories</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Books">Books</option>
+              <option value="Water Bottle">Water Bottle</option>
+              <option value="Clothing">Clothing</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div className="relative">
+            <Filter className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/40" size={20} />
+            <select 
+              className="pl-12 pr-10 py-3 bg-background border border-primary/20 radius-sys w-full sm:w-auto focus:outline-none focus:border-accent transition-colors font-sans font-medium appearance-none"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              <option value="all">All Status</option>
+              <option value="open">Open</option>
+              <option value="resolved">Resolved</option>
             </select>
           </div>
         </div>

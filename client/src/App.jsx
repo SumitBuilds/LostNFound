@@ -4,10 +4,14 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import ItemsList from './pages/ItemsList';
 import CreateItem from './pages/CreateItem';
+import { AuthProvider } from './context/AuthContext';
+import { FiltersProvider } from './context/FiltersContext';
 
 function App() {
   return (
-    <Router>
+    <AuthProvider>
+      <FiltersProvider>
+        <Router>
       <Navbar />
       <main>
         <Routes>
@@ -18,6 +22,8 @@ function App() {
         </Routes>
       </main>
     </Router>
+      </FiltersProvider>
+    </AuthProvider>
   );
 }
 

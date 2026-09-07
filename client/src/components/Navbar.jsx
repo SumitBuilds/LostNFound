@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -9,6 +10,7 @@ export default function Navbar() {
   const navRef = useRef(null);
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
+  const { user, login, logout } = useAuth();
 
   useEffect(() => {
     // Only apply morphing logic on the home page where there is a hero section.
@@ -52,9 +54,16 @@ export default function Navbar() {
         </div>
         
         <div className="flex items-center gap-4">
-          <Link to="/login" className="hidden md:block font-medium hover-lift">
-            Log In
-          </Link>
+          {user ? (
+            <div className="hidden md:flex items-center gap-4">
+              <span className="font-data text-sm">Hi, {user.name}</span>
+              <button onClick={logout} className="font-medium hover-lift text-sm text-red-500/80">Log Out</button>
+            </div>
+          ) : (
+            <button onClick={() => login()} className="hidden md:block font-medium hover-lift">
+              Log In
+            </button>
+          )}
           <Link 
             to="/items/new" 
             className="btn-magnetic bg-accent text-background px-5 py-2.5 rounded-full font-medium shadow-lg shadow-accent/20"
