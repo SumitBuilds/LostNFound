@@ -3,7 +3,7 @@ const Item = require('../models/Item');
 // @desc    Get all items
 // @route   GET /api/items
 // @access  Public (for now)
-exports.getItems = async (req, res) => {
+exports.getItems = async (req, res, next) => {
   try {
     const { type, category, status } = req.query;
     
@@ -16,14 +16,14 @@ exports.getItems = async (req, res) => {
     const items = await Item.find(filter).sort({ createdAt: -1 });
     res.status(200).json(items);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error fetching items', error: error.message });
+    next(error);
   }
 };
 
 // @desc    Get single item
 // @route   GET /api/items/:id
 // @access  Public
-exports.getItemById = async (req, res) => {
+exports.getItemById = async (req, res, next) => {
   try {
     const item = await Item.findById(req.params.id);
     if (!item) {
@@ -31,27 +31,27 @@ exports.getItemById = async (req, res) => {
     }
     res.status(200).json(item);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error fetching item', error: error.message });
+    next(error);
   }
 };
 
 // @desc    Create an item
 // @route   POST /api/items
 // @access  Public (for now, usually Private)
-exports.createItem = async (req, res) => {
+exports.createItem = async (req, res, next) => {
   try {
     const newItem = new Item(req.body);
     const savedItem = await newItem.save();
     res.status(201).json(savedItem);
   } catch (error) {
-    res.status(400).json({ message: 'Error creating item', error: error.message });
+    next(error);
   }
 };
 
 // @desc    Update an item
 // @route   PUT /api/items/:id
 // @access  Public (for now)
-exports.updateItem = async (req, res) => {
+exports.updateItem = async (req, res, next) => {
   try {
     const updatedItem = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!updatedItem) {
@@ -59,14 +59,14 @@ exports.updateItem = async (req, res) => {
     }
     res.status(200).json(updatedItem);
   } catch (error) {
-    res.status(400).json({ message: 'Error updating item', error: error.message });
+    next(error);
   }
 };
 
 // @desc    Delete an item
 // @route   DELETE /api/items/:id
 // @access  Public (for now)
-exports.deleteItem = async (req, res) => {
+exports.deleteItem = async (req, res, next) => {
   try {
     const item = await Item.findByIdAndDelete(req.params.id);
     if (!item) {
@@ -74,6 +74,6 @@ exports.deleteItem = async (req, res) => {
     }
     res.status(200).json({ message: 'Item removed' });
   } catch (error) {
-    res.status(500).json({ message: 'Error deleting item', error: error.message });
+    next(error);
   }
 };

@@ -28,6 +28,10 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok', message: 'Server is running' });
 });
 
+// Global Error Handler (must be mounted after all routes)
+const { errorHandler } = require('./middleware/errorMiddleware');
+app.use(errorHandler);
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
