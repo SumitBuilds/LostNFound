@@ -21,7 +21,15 @@ export default function ItemCard({ item }) {
       
       {item.image && (
         <div className="w-full h-48 mb-4 rounded-3xl overflow-hidden bg-primary/5">
-          <img src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          <img 
+            src={item.image} 
+            alt={item.title} 
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = `https://placehold.co/600x400/2E4036/F2F0E9?text=${encodeURIComponent(item.title)}`;
+            }}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+          />
         </div>
       )}
 

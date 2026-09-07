@@ -7,7 +7,7 @@ export const dummyItems = [
     category: 'Water Bottle',
     location: 'Main Library, 2nd Floor',
     dateLostFound: '2023-10-24T14:30:00Z',
-    image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?q=80&w=600&auto=format&fit=crop',
+    image: '/items/blue_hydroflask.jpg',
     status: 'open',
     reporter: 'user123',
     createdAt: '2023-10-24T18:00:00Z'
@@ -20,7 +20,7 @@ export const dummyItems = [
     category: 'Electronics',
     location: 'Student Union, North Entrance',
     dateLostFound: '2023-10-25T09:15:00Z',
-    image: 'https://images.unsplash.com/photo-1606220588913-b3eea41b9d16?q=80&w=600&auto=format&fit=crop',
+    image: '/items/airpods_pro.jpg',
     status: 'open',
     reporter: 'user456',
     createdAt: '2023-10-25T10:00:00Z'
@@ -33,7 +33,7 @@ export const dummyItems = [
     category: 'Books',
     location: 'Math Building, Room 304',
     dateLostFound: '2023-10-22T16:00:00Z',
-    image: null,
+    image: '/items/calculus_textbook.jpg',
     status: 'open',
     reporter: 'user789',
     createdAt: '2023-10-23T08:30:00Z'
