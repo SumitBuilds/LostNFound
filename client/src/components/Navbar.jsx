@@ -60,9 +60,14 @@ export default function Navbar() {
               <button onClick={logout} className="font-medium hover-lift text-sm text-red-500/80">Log Out</button>
             </div>
           ) : (
-            <button onClick={() => login()} className="hidden md:block font-medium hover-lift">
-              Log In
-            </button>
+            <div className="hidden md:flex items-center gap-4">
+              <Link to="/login" className="font-medium hover-lift">
+                Log In
+              </Link>
+              <Link to="/register" className="font-medium hover-lift text-accent">
+                Register
+              </Link>
+            </div>
           )}
           <Link 
             to="/items/new" 
