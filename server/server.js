@@ -21,7 +21,9 @@ mongoose.connect(process.env.MONGO_URI)
 
 // Routes
 const itemRoutes = require('./routes/itemRoutes');
+const authRoutes = require('./routes/authRoutes');
 app.use('/api/items', itemRoutes);
+app.use('/api/auth', authRoutes);
 
 // Basic health check route
 app.get('/api/health', (req, res) => {

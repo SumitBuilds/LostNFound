@@ -5,19 +5,18 @@ import { useAuth } from '../context/AuthContext';
 
 export default function Register() {
   const navigate = useNavigate();
-  const { login } = useAuth();
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
+  const { register: registerAuth } = useAuth();
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({ mode: 'onChange' });
+  const [apiError, setApiError] = React.useState(null);
 
-  const onSubmit = (data) => {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        // Stage 6 API integration will go here
-        // For now, simulate successful registration and login
-        login({ name: data.name, role: 'student' });
-        navigate('/');
-        resolve();
-      }, 1000);
-    });
+  const onSubmit = async (data) => {
+    setApiError(null);
+    try {
+      await registerAuth(data);
+      navigate('/');
+    } catch (err) {
+      setApiError(err.message);
+    }
   };
 
   return (
@@ -88,6 +87,12 @@ export default function Register() {
           >
             {isSubmitting ? 'Registering...' : 'Create Account'}
           </button>
+
+          {apiError && (
+            <div className="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-center">
+              <p className="text-red-500 font-bold text-sm">{apiError}</p>
+            </div>
+          )}
         </form>
 
         <p className="text-center mt-8 text-sm text-text-dark/70">

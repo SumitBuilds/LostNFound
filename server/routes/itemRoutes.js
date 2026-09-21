@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const { validateItem } = require('../middleware/validationMiddleware');
 const { apiLimiter } = require('../middleware/rateLimiter');
+const { protect } = require('../middleware/authMiddleware');
+
 const {
   getItems,
   getItemById,
@@ -12,11 +14,11 @@ const {
 
 router.route('/')
   .get(getItems)
-  .post(apiLimiter, validateItem, createItem);
+  .post(protect, apiLimiter, validateItem, createItem);
 
 router.route('/:id')
   .get(getItemById)
-  .put(validateItem, updateItem)
-  .delete(deleteItem);
+  .put(protect, validateItem, updateItem)
+  .delete(protect, deleteItem);
 
 module.exports = router;

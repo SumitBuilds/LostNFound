@@ -17,7 +17,16 @@ const useFetch = (url) => {
         const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
         const fullUrl = url.startsWith('/api') ? `${baseUrl}${url}` : url;
 
-        const response = await fetch(fullUrl, { signal: abortController.signal });
+        const headers = {};
+        const token = localStorage.getItem('token');
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const response = await fetch(fullUrl, { 
+          headers,
+          signal: abortController.signal 
+        });
         if (!response.ok) {
           throw new Error(`Error: ${response.status} ${response.statusText}`);
         }

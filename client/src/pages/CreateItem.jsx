@@ -8,6 +8,7 @@ export default function CreateItem() {
   const [success, setSuccess] = useState(false);
   const [apiError, setApiError] = useState(null);
   const { register, handleSubmit, watch, setValue, formState: { errors, isSubmitting } } = useForm({
+    mode: 'onChange',
     defaultValues: {
       type: 'lost',
       title: '',
@@ -28,10 +29,13 @@ export default function CreateItem() {
         date: data.dateLostFound // map to backend schema
       };
 
+      const token = localStorage.getItem('token');
+      
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/items`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(payload),
       });

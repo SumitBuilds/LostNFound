@@ -40,7 +40,18 @@ exports.getItemById = async (req, res, next) => {
 // @access  Public (for now, usually Private)
 exports.createItem = async (req, res, next) => {
   try {
-    const newItem = new Item(req.body);
+    const { title, description, type, category } = req.body;
+    const newItem = new Item({
+      title,
+      description,
+      type,
+      category,
+      status: req.body.status || 'open',
+      image: req.body.image || '',
+      location: req.body.location || '',
+      date: req.body.date || Date.now(),
+      reporter: req.user._id
+    });
     const savedItem = await newItem.save();
     res.status(201).json(savedItem);
   } catch (error) {
@@ -53,11 +64,23 @@ exports.createItem = async (req, res, next) => {
 // @access  Public (for now)
 exports.updateItem = async (req, res, next) => {
   try {
-    const updatedItem = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-    if (!updatedItem) {
+    let item = await Item.findById(req.params.id);
+
+    if (!item) {
       return res.status(404).json({ message: 'Item not found' });
     }
-    res.status(200).json(updatedItem);
+
+    // Make sure user owns item
+    if (item.reporter.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'User not authorized to update this item' });
+    }
+
+    item = await Item.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+    });
+
+    res.status(200).json(item);
   } catch (error) {
     next(error);
   }
@@ -68,10 +91,19 @@ exports.updateItem = async (req, res, next) => {
 // @access  Public (for now)
 exports.deleteItem = async (req, res, next) => {
   try {
-    const item = await Item.findByIdAndDelete(req.params.id);
+    const item = await Item.findById(req.params.id);
+
     if (!item) {
       return res.status(404).json({ message: 'Item not found' });
     }
+
+    // Make sure user owns item
+    if (item.reporter.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'User not authorized to delete this item' });
+    }
+
+    await item.deleteOne();
+
     res.status(200).json({ message: 'Item removed' });
   } catch (error) {
     next(error);
