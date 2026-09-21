@@ -53,8 +53,8 @@ export default function Register() {
               {...register('email', { 
                 required: 'Email is required',
                 pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: 'Invalid email address'
+                  value: /^[A-Z0-9._%+-]+@ves\.ac\.in$/i,
+                  message: 'Please use your @ves.ac.in college email'
                 }
               })}
               placeholder="you@university.edu" 

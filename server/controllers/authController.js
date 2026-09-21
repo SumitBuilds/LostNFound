@@ -14,6 +14,10 @@ exports.registerUser = async (req, res, next) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
+    if (!email.toLowerCase().endsWith('@ves.ac.in')) {
+      return res.status(400).json({ message: 'Registration is restricted to @ves.ac.in college emails' });
+    }
+
     const user = await User.create({
       name,
       email,
